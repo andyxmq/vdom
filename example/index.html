@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>snabbdom 使用</title>
+</head>
+<body>
+  <div id="container"></div>
+  <button id="changeButton">测试</button>
+  <script src="https://cdn.bootcss.com/snabbdom/0.7.2/snabbdom.js"></script>
+  <script src="https://cdn.bootcss.com/snabbdom/0.7.2/snabbdom-class.js"></script>
+  <script src="https://cdn.bootcss.com/snabbdom/0.7.2/snabbdom-props.js"></script>
+  <script src="https://cdn.bootcss.com/snabbdom/0.7.2/snabbdom-style.js"></script>
+  <script src="https://cdn.bootcss.com/snabbdom/0.7.2/h.js"></script>
+  <script src="https://cdn.bootcss.com/snabbdom/0.7.2/snabbdom-eventlisteners.js"></script>
+  <script>
+    var patch = snabbdom.init([ // Init patch function with chosen modules
+      snabbdom_class.default, // makes it easy to toggle classes
+      snabbdom_props.default, // for setting properties on DOM elements
+      snabbdom_style.default, // handles styling on elements with support for animations
+      snabbdom_eventlisteners.default, // attaches event listeners
+    ]);
+    function someFn(){
+      console.log('aaa');
+    }
+    var h = h.h;
+    var container = document.getElementById('container');
+    var vnode = h('div#container.two.classes', {on: {click: someFn}}, [
+      h('span', {style: {fontWeight: 'bold'}}, 'This is bold'),
+      ' and this is just normal text',
+      h('a', {props: {href: '/foo'}}, 'I\'ll take you places!')
+    ]);
+    patch(container, vnode);
+
+    document.getElementById('changeButton').addEventListener('click', function(){
+      var newVnode = h('div#container.two.classes', {on: {click: someFn}}, [
+      h('span', {style: {fontWeight: 'bold'}}, 'This is bold'),
+        'and this is still just normal text',
+        h('a', {props: {href: '/bar'}}, 'I\'ll take you places!')
+      ]);
+      patch(vnode, newVnode); 
+    })
+  </script>
+</body>
+</html>
